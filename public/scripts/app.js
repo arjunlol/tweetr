@@ -4,10 +4,23 @@
  * Reminder: Use (and do all your DOM work in) jQuery's document ready function
  */
  $(document).ready( function() {
+
   loadTweets("all")
+
   $('form').on('submit', function(event) {
     event.preventDefault();
+    console.log('Test', $(this).find('.test').val());
     let serialized = $(this).serialize();
+    let text = $(this).find('.text').val();
+    if (text === "" || text === null) {
+      console.log(text.length);
+      return;
+    } else if (text.length > 140) {
+      console.log('wtf too big');
+      $(this).after('<span class="error">TOO MANY LETTER</span>');
+      return;
+    }
+    // console.log(serialized);
     $.ajax({
       url:'/tweets/',
       method: 'POST',
