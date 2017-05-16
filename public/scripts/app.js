@@ -51,7 +51,25 @@
       "created_at": 1461113796368
     }
   ];
+  renderTweets(data);
 
+  $('form').on('submit', function(event) {
+    event.preventDefault();
+    let serialized = $(this).serialize();
+    $.ajax({
+      url:'/tweets/',
+      method: 'POST',
+      data: serialized,
+      success: function () {
+        //console.log(serialized);
+      }
+      // error: function () {
+      //   console.log('theres an error');
+      // }
+    })
+  });
+
+});
   function renderTweets(tweets) {
     // loops through tweets
       // calls createTweetElement for each tweet
@@ -81,6 +99,5 @@
     return $tweet;
   }
 
-renderTweets(data);
-
-});
+  function formatDate (date) {
+  }
