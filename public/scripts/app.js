@@ -56,12 +56,14 @@
     // loops through tweets
       // calls createTweetElement for each tweet
       // takes return value and appends it to the tweets container
-    $('#tweets').append()
+    for (let i = 0; i<tweets.length; i++) {
+      $('#tweets').append(createTweetElement(tweets[i]));
+    }
   }
 
   function createTweetElement(tweetobj) {
     let html = `<header>
-      <img src=${tweetobj.user.avatars.small}/>
+      <img src=${tweetobj.user.avatars.small}>
       <h2 class="tweet-name">${tweetobj.user.name}</h2>
       <p class="tweet-tag">${tweetobj.user.handle}</p>
     </header>
