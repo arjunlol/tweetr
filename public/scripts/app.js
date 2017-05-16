@@ -61,13 +61,28 @@
       method: 'POST',
       data: serialized,
       success: function () {
-        //console.log(serialized);
+        loadTweets();
       }
       // error: function () {
       //   console.log('theres an error');
       // }
     })
   });
+  //responsible fetching tweets
+  function loadTweets() {
+    $.ajax({
+    url:'/tweets/',
+    method: 'GET',
+    dataType: 'json',
+    success: function (data) {
+      console.log(data);
+    }
+    // error: function () {
+    //   console.log('theres an error');
+    // }
+    })
+  };
+
 
 });
   function renderTweets(tweets) {
