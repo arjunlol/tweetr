@@ -75,7 +75,8 @@
     method: 'GET',
     dataType: 'json',
     success: function (data) {
-      console.log(data);
+      datalength = (Object.keys(data).length);
+      renderTweets(data[datalength-1]);
     }
     // error: function () {
     //   console.log('theres an error');
@@ -89,8 +90,13 @@
     // loops through tweets
       // calls createTweetElement for each tweet
       // takes return value and appends it to the tweets container
+
+    if (!tweets[1]){
+      $('#tweets').prepend(createTweetElement(tweets));
+      return;
+    }
     for (let i = 0; i<tweets.length; i++) {
-      $('#tweets').append(createTweetElement(tweets[i]));
+      $('#tweets').prepend(createTweetElement(tweets[i]));
     }
   }
 
