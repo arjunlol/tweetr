@@ -8,6 +8,13 @@
   // $('.no-error-limit').slideUp();
   loadTweets("all")
 
+
+  $('#compose').on('click', function(event) {
+    $('.new-tweet').slideToggle();
+    $('.text').focus();
+
+  })
+
   $('form').on('input', function(event) {
     let text = $(this).find('.text').val();
     if (!(text === "") || !(text === null)) {
