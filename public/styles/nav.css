@@ -37,4 +37,5 @@
 #nav-bar #compose:hover {
   opacity: 0.9;
   color:black;
+  cursor: pointer;
 }

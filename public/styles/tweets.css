@@ -76,3 +76,7 @@
 #tweets footer img:nth-child(3) {
     height:1.2em;
 }
+
+#tweets .tweet-text {
+    overflow-wrap: break-word;
+}
