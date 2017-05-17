@@ -4,22 +4,36 @@
  * Reminder: Use (and do all your DOM work in) jQuery's document ready function
  */
  $(document).ready( function() {
-
+  // $('.no-error-empty').slideUp();
+  // $('.no-error-limit').slideUp();
   loadTweets("all")
+
+  $('form').on('input', function(event) {
+    let text = $(this).find('.text').val();
+    if (!(text === "") || !(text === null)) {
+      $('.no-error-empty').slideUp();
+    }
+    if (!(text.length > 140)) {
+      $('.no-error-limit').slideUp();
+    }
+  });
 
   $('form').on('submit', function(event) {
     event.preventDefault();
     console.log('Test', $(this).find('.test').val());
     let serialized = $(this).serialize();
-    let text = $(this).find('.text').val();
-    if (text === "" || text === null) {
-      console.log(text.length);
-      return;
-    } else if (text.length > 140) {
-      console.log('wtf too big');
-      $(this).after('<span class="error">TOO MANY LETTER</span>');
+    if(!validate(this)){
       return;
     }
+    // let text = $(this).find('.text').val();
+    // if (text === "" || text === null) {
+    //   console.log(text.length);
+    //   return;
+    // } else if (text.length > 140) {
+    //   console.log('wtf too big');
+    //   $(this).after('<span class="error">TOO MANY LETTER</span>');
+    //   return;
+    // }
     // console.log(serialized);
     $.ajax({
       url:'/tweets/',
@@ -32,7 +46,30 @@
       //   console.log('theres an error');
       // }
     })
+  function validate(This) {
+    let text = $(This).find('.text').val();
+    // if ($(This).find('.error')) { //if error span already shown
+    //   console.log($(This).find('.error'));
+    //   ($(This).find('.error').removeClass('error'));
+    //   console.log($(This).find('.error'));
+    // }
+
+    if (text === "" || text === null) {
+      $('.no-error-empty').slideDown();
+      return false;
+    } else if (text.length > 140) {
+      $('.no-error-limit').slideDown();
+      return false;
+    }
+    return true;
+  };
   });
+
+
+
+
+
+
   //responsible fetching tweets
   function loadTweets(x) {
     $.ajax({

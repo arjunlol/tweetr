@@ -35,3 +35,18 @@
 .over140 {
   color: red;
 }
+
+/*.error {
+  color: red;
+  font-size: x-small;
+  opacity: 1;
+}*/
+
+.no-error-empty{
+  color:red;
+  display:none;
+}
+.no-error-limit{
+  color:red;
+  display:none;
+}
