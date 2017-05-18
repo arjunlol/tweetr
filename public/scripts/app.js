@@ -7,13 +7,18 @@
   // $('.no-error-empty').slideUp();
   // $('.no-error-limit').slideUp();
   loadTweets("all")
+  $('body').on('click', '.likes',  function(event) {
+    $('.likes').data('likes', 1);
+    console.log($('.likes').data());
+  });
+
 
 
   $('#compose').on('click', function(event) {
     $('.new-tweet').slideToggle();
     $('.text').focus();
 
-  })
+  });
 
   $('form').on('input', function(event) {
     let text = $(this).find('.text').val();
@@ -126,7 +131,7 @@
       <span>
       <img src='https://cdn4.iconfinder.com/data/icons/ionicons/512/icon-ios7-flag-128.png'/>
       <img src='https://cdn0.iconfinder.com/data/icons/entypo/100/retweet-128.png'/>
-      <img src='https://cdn2.iconfinder.com/data/icons/pittogrammi/142/80-128.png'/>
+      <img class="likes" src='https://cdn2.iconfinder.com/data/icons/pittogrammi/142/80-128.png'/>
       </span>
     </footer>`
 
