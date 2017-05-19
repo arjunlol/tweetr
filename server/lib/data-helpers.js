@@ -19,13 +19,26 @@ module.exports = function makeDataHelpers(db) {
 
     // Get all tweets in `db`, sorted by newest first
     getTweets: function(callback) {
-      const sortNewestFirst = (a, b) => a.created_at - b.created_at;
+ //     const sortNewestFirst = (a, b) => a.created_at - b.created_at;
       db.collection('tweets').find().toArray(callback);
 
       // // simulateDelay(() => {
       //   const sortNewestFirst = (a, b) => a.created_at - b.created_at;
       //   callback(null, db.tweets.sort(sortNewestFirst));
       // });
+    },
+
+    checkUserExists: function(email, callback) {
+      db.collection('users').find({"email":email}).toArray(callback);
+    },
+
+    createUser: function(user, callback) {
+      db.collection('users').insertOne(user);
+      callback(null,true);
+    },
+
+    checkUserMatch: function(user, callback) {
+      db.collection('users').find({"email": user.email}).toArray(callback);
     }
 
   };

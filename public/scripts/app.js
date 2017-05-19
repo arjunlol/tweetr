@@ -12,6 +12,12 @@
     console.log($('.likes').data());
   });
 
+  $('#login').on('click', function(event) {
+    $('.login').slideToggle();
+  });
+  $('#register').on('click', function(event) {
+    $('.register').slideToggle();
+  });
 
 
   $('#compose').on('click', function(event) {
@@ -20,7 +26,7 @@
 
   });
 
-  $('form').on('input', function(event) {
+  $('.new-tweet form').on('input', function(event) {
     let text = $(this).find('.text').val();
     if (!(text === "") || !(text === null)) {
       $('.no-error-empty').slideUp();
@@ -30,7 +36,7 @@
     }
   });
 
-  $('form').on('submit', function(event) {
+  $('.new-tweet form').on('submit', function(event) {
     event.preventDefault();
     console.log('Test', $(this).find('.test').val());
     let serialized = $(this).serialize();

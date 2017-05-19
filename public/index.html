@@ -31,7 +31,29 @@
       <span class="header">Tweeter</span>
       <span class="header-buttons">
         <div id="compose">Compose</div>
+        <div id="login">Login</div>
+          <span class="tweets/login">
+            <form action="tweets/login" method="POST">
+              <input type="email" name="email">
+              <input type="password" name="password">
+              <input type="submit" value="Login">
+            </form>
+          </span>
+        <div id="register">Register</div>
+          <span class="register">
+            <form action="tweets/register" method="POST">
+              <input type="email" name="email" value="Email">
+              <input type="text" name="name" value="Name">
+              <input type="text" name="handler" value="Handle">
+              <input type="password" name="password" value="Password">
+              <input type="submit" value="Register">
+            </form>
+          </span>
+        <form name="logout" id="logout" action="tweets/logout" method="POST">
+          <div onClick="document.forms['logout'].submit();" id="logout">Logout</div>
+        </form>
       </span>
+
     </nav>
 
     <!-- Page-specific (main) content here -->
