@@ -5,7 +5,8 @@ const userHelper    = require("../lib/util/user-helper")
 const express       = require('express');
 const tweetsRoutes  = express.Router();
 const bcrypt = require('bcrypt');
-//const cookieSession = require('cookie-session');
+const cookieSession = require('cookie-session');
+
 
 module.exports = function(DataHelpers) {
 
@@ -24,10 +25,16 @@ module.exports = function(DataHelpers) {
       res.status(400).json({ error: 'invalid request: no data in POST body'});
       return;
     }
-
-    const user = req.body.user ? req.body.user : userHelper.generateRandomUser();
+    if(!req.session.user){
+      res.status(403).send('please login or register');
+      return;
+    }
+    //const user =  req.session.user;
+    const randomUser = userHelper.generateRandomUser();
     const tweet = {
-      user: user,
+      user: {name: req.session.user[0],
+        handle: req.session.user[1],
+        avatars: randomUser.avatars},
       content: {
         text: req.body.text
       },
@@ -52,13 +59,14 @@ module.exports = function(DataHelpers) {
     DataHelpers.checkUserExists(req.body.email, (err, user) => {
       if (!(user[0] === undefined)) {
         return;
-      };
+      }
       user = {
         email: req.body.email,
         name: req.body.name,
         handler: req.body.handler,
         password: bcrypt.hashSync(req.body.password, 10)
       };
+      console.log(user);
       DataHelpers.createUser(user, (err) => {
         console.log('done');
         // if (err) {
@@ -67,7 +75,8 @@ module.exports = function(DataHelpers) {
         //   res.status(201).send();
         // }
       });
-      req.session.user = req.body.handler;
+      console.log(user);
+      req.session.user = [user['name'], user['handler']];
       res.redirect('/');
     });
 
@@ -80,8 +89,6 @@ module.exports = function(DataHelpers) {
 
   tweetsRoutes.post("/login", function(req, res) {
 
-    console.log('e');
-
     if(req.body.email === "" ||  req.body.password === "" ){ //if user or pass left empty
       res.status(400).send("Please fill in both email and password");
       return;
@@ -92,14 +99,12 @@ module.exports = function(DataHelpers) {
     };
 
     DataHelpers.checkUserMatch(user, (err, match) => {
-      console.log(match[0].password)
-      console.log(user.password);
       console.log((bcrypt.compareSync(user.password, match[0].password)));
       if((match[0] === undefined) || !(bcrypt.compareSync(user.password, match[0].password))){
         res.status(403).send("Invalid Username/Password");
         return;
       } else if((bcrypt.compareSync(user.password, match[0].password))) {
-        req.session.user = match[0];
+        req.session.user = [match[0]['name'], match[0]['handler']];
         res.redirect('/');
       }
 
