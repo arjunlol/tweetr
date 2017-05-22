@@ -7,9 +7,42 @@
   // $('.no-error-empty').slideUp();
   // $('.no-error-limit').slideUp();
   loadTweets("all")
+  let likesCount = {}
   $('body').on('click', '.likes',  function(event) {
-    $('.likes').data('likes', 1);
-    console.log($('.likes').data());
+    //$('.likes').data('likes', 1);
+    // console.log($(this).data('likes'))//.find('.likes').data('id'));
+    let id = $(this).data('id')
+    let likesArray = $(this).data('likesarray');
+    let likesnum = $(this).data("numberoflikes")
+    let counter = $(this).next()
+    likesCount[id] = likesCount[id] || likesnum; //data attribute not storing properly..
+    $.ajax({
+      url: '/tweets/like',
+      method: 'POST',
+      data: {id: id, 'likesArray': likesArray},
+      success: function(name) {
+    //  likesArray.indexOf(name) ? likesArray = likesArray: likesArray=[];
+        let i = likesArray.indexOf(name);
+        if (i !== -1) {
+          likesArray.splice(i,1);
+          $(event.target).removeClass('liked');
+          likesCount[id]--;
+        } else {
+          likesArray.push(name);
+          likesCount[id]++;
+          // likesnum++;
+          // // $(this).data().likesnum++;
+          $(event.target).addClass('liked');
+        }// i !== -1 ? likesArray.splice(i,1): likesArray.push(name);
+        $(this).data('numberoflikes', likesnum);
+        $(this).data('likesarray', 'test');
+        counter.text(likesCount[id]);
+        // console.log(likesCount);
+        // likesCount[id] = likesnum;
+        // console.log(likesCount);
+        // console.log('data likes array after:', $(this).data('likesarray'))
+      }
+    })
   });
 
   $('#login').on('click', function(event) {
@@ -84,10 +117,6 @@
   });
 
 
-
-
-
-
   //responsible fetching tweets
   function loadTweets(x) {
     $.ajax({
@@ -137,7 +166,8 @@
       <span>
       <img src='https://cdn4.iconfinder.com/data/icons/ionicons/512/icon-ios7-flag-128.png'/>
       <img src='https://cdn0.iconfinder.com/data/icons/entypo/100/retweet-128.png'/>
-      <img class="likes" src='https://cdn2.iconfinder.com/data/icons/pittogrammi/142/80-128.png'/>
+      <img class="likes" data-numberoflikes=${tweetobj.likes.length} data-id=${tweetobj._id} data-likesarray=${JSON.stringify(tweetobj.likes)} src='https://cdn2.iconfinder.com/data/icons/pittogrammi/142/80-128.png'/>
+      <p class="likesshow">${tweetobj.likes.length}</p>
       </span>
     </footer>`
 

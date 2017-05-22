@@ -80,3 +80,11 @@
 #tweets .tweet-text {
     overflow-wrap: break-word;
 }
+
+.likes {
+    cursor: pointer;
+}
+#tweets footer .liked {
+    border: 1.3px dashed #00a087;
+    border-radius: 25px;
+}

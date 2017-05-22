@@ -10,6 +10,24 @@ const cookieSession = require('cookie-session');
 
 module.exports = function(DataHelpers) {
 
+
+  tweetsRoutes.post("/like", function(req, res) {
+    let name = req.session.user[0];
+    let tweetID = req.body.id;
+    let likesArray = req.body.likesArray || [];
+    if(likesArray.indexOf(name) === -1) {
+      DataHelpers.changeLikesUp(name, tweetID, (err, array) => {
+        console.log('up');
+        res.send(name);
+      });
+    } else {
+      DataHelpers.changeLikesDown(name,tweetID, (err, array) => {
+        console.log('down');
+        res.send(name);
+      });
+    }
+  });
+
   tweetsRoutes.get("/", function(req, res) {
     DataHelpers.getTweets((err, tweets) => {
       if (err) {
@@ -38,7 +56,8 @@ module.exports = function(DataHelpers) {
       content: {
         text: req.body.text
       },
-      created_at: Date.now()
+      created_at: Date.now(),
+      likes: []
     };
 
     DataHelpers.saveTweet(tweet, (err) => {
