@@ -35,7 +35,7 @@
           $(event.target).addClass('liked');
         }// i !== -1 ? likesArray.splice(i,1): likesArray.push(name);
         $(this).data('numberoflikes', likesnum);
-        $(this).data('likesarray', 'test');
+        $(this).data('likesarray', likesArray);
         counter.text(likesCount[id]);
         // console.log(likesCount);
         // likesCount[id] = likesnum;
@@ -46,9 +46,12 @@
   });
 
   $('#login').on('click', function(event) {
+    $('.register').slideUp();
     $('.login').slideToggle();
+
   });
   $('#register').on('click', function(event) {
+    $('.login').slideUp();
     $('.register').slideToggle();
   });
 
@@ -56,7 +59,6 @@
   $('#compose').on('click', function(event) {
     $('.new-tweet').slideToggle();
     $('.text').focus();
-
   });
 
   $('.new-tweet form').on('input', function(event) {

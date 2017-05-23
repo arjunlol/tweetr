@@ -32,14 +32,17 @@
       <span class="header-buttons">
         <div id="compose">Compose</div>
         <div id="login">Login</div>
-          <span class="tweets/login">
+        <div id="register">Register</div>
+        <form name="logout" id="logout" action="tweets/logout" method="POST">
+          <div onClick="document.forms['logout'].submit();" id="logout">Logout</div>
+        </form>
+          <span class="login">
             <form action="tweets/login" method="POST">
               <input type="email" name="email">
               <input type="password" name="password">
               <input type="submit" value="Login">
             </form>
           </span>
-        <div id="register">Register</div>
           <span class="register">
             <form action="tweets/register" method="POST">
               <input type="email" name="email" value="Email">
@@ -49,9 +52,6 @@
               <input type="submit" value="Register">
             </form>
           </span>
-        <form name="logout" id="logout" action="tweets/logout" method="POST">
-          <div onClick="document.forms['logout'].submit();" id="logout">Logout</div>
-        </form>
       </span>
 
     </nav>

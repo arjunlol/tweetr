@@ -77,6 +77,11 @@
     height:1.2em;
 }
 
+#tweets footer span p {
+    margin-top:-1.5em;
+    margin-right:-6em;
+}
+
 #tweets .tweet-text {
     overflow-wrap: break-word;
 }

@@ -12,17 +12,19 @@ module.exports = function(DataHelpers) {
 
 
   tweetsRoutes.post("/like", function(req, res) {
+    if(!req.session.user) {
+      res.status(403).send('Please log in');
+      return;
+    }
     let name = req.session.user[0];
     let tweetID = req.body.id;
     let likesArray = req.body.likesArray || [];
     if(likesArray.indexOf(name) === -1) {
       DataHelpers.changeLikesUp(name, tweetID, (err, array) => {
-        console.log('up');
         res.send(name);
       });
     } else {
       DataHelpers.changeLikesDown(name,tweetID, (err, array) => {
-        console.log('down');
         res.send(name);
       });
     }
@@ -39,12 +41,12 @@ module.exports = function(DataHelpers) {
   });
 
   tweetsRoutes.post("/", function(req, res) {
-    if (!req.body.text) {
-      res.status(400).json({ error: 'invalid request: no data in POST body'});
-      return;
-    }
     if(!req.session.user){
       res.status(403).send('please login or register');
+      return;
+    }
+    if (!req.body.text) {
+      res.status(400).json({ error: 'invalid request: no data in POST body'});
       return;
     }
     //const user =  req.session.user;
@@ -85,16 +87,8 @@ module.exports = function(DataHelpers) {
         handler: req.body.handler,
         password: bcrypt.hashSync(req.body.password, 10)
       };
-      console.log(user);
       DataHelpers.createUser(user, (err) => {
-        console.log('done');
-        // if (err) {
-        //   res.status(500).json({ error: err.message });
-        // } else {
-        //   res.status(201).send();
-        // }
       });
-      console.log(user);
       req.session.user = [user['name'], user['handler']];
       res.redirect('/');
     });
@@ -118,7 +112,6 @@ module.exports = function(DataHelpers) {
     };
 
     DataHelpers.checkUserMatch(user, (err, match) => {
-      console.log((bcrypt.compareSync(user.password, match[0].password)));
       if((match[0] === undefined) || !(bcrypt.compareSync(user.password, match[0].password))){
         res.status(403).send("Invalid Username/Password");
         return;
