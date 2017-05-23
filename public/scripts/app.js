@@ -6,20 +6,19 @@
  $(document).ready( function() {
 
   loadTweets("all")
-  let likesCount = {}
+  let likesCount = {} //object used to keep track of likes on front end
   $('body').on('click', '.likes',  function(event) {
     let id = $(this).data('id')
     let likesArray = $(this).data('likesarray');
     let likesnum = $(this).data("numberoflikes")
-    let counter = $(this).next()
-    likesCount[id] = likesCount[id] || likesnum; //data attribute not storing properly..
+    let counter = $(this).next() //counter of physical likes
+    likesCount[id] = likesCount[id] || likesnum; //data attribute not storing properly.. so had to use global object
     $.ajax({
       url: '/tweets/like',
       method: 'POST',
       data: {id: id, 'likesArray': likesArray},
       success: function(name) {
-    //  likesArray.indexOf(name) ? likesArray = likesArray: likesArray=[];
-        let i = likesArray.indexOf(name);
+        let i = likesArray.indexOf(name); //-1 if name not in array
         if (i !== -1) {
           likesArray.splice(i,1);
           $(event.target).removeClass('liked');
@@ -30,10 +29,10 @@
           // likesnum++;
           // // $(this).data().likesnum++;
           $(event.target).addClass('liked');
-        }// i !== -1 ? likesArray.splice(i,1): likesArray.push(name);
-        $(this).data('numberoflikes', likesnum);
+        }
+        $(this).data('numberoflikes', likesnum);//data attribute not dynamically updating had to use global var likescount
         $(this).data('likesarray', likesArray);
-        counter.text(likesCount[id]);
+        counter.text(likesCount[id]);//update on front end
       }
     })
   });
@@ -56,21 +55,23 @@
 
   $('.new-tweet form').on('input', function(event) {
     let text = $(this).find('.text').val();
-    if (!(text === "") || !(text === null)) {
+    if (!(text === "") || !(text === null)) { //check if tweet has content before posting
       $('.no-error-empty').slideUp();
     }
-    if (!(text.length > 140)) {
+    if (!(text.length > 140)) { //check less than 140 char
       $('.no-error-limit').slideUp();
     }
   });
 
   $('.new-tweet form').on('submit', function(event) {
-    event.preventDefault();
-    let serialized = $(this).serialize();
+    event.preventDefault(); //intercept post with ajax
+    let serialized = $(this).serialize(); //serialize to query string
     if(!validate(this)){
       return;
     }
+    //reset textarea and counter
     $('.text').val('');
+    $('.counter').text(140);
     $.ajax({
       url:'/tweets/',
       method: 'POST',
@@ -83,6 +84,7 @@
 
 
 });
+ //function check if valid post entry
   function validate(This) {
     let text = $(This).find('.text').val();
     if (text === "" || text === null) {
@@ -147,5 +149,3 @@
     return $tweet;
   }
 
-  function formatDate (date) {
-  }

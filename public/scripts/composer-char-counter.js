@@ -1,4 +1,5 @@
 $(document).ready( function() {
+  //update character count dynamically as user types tweet
   $('.new-tweet textarea').on('input', function() {
     let counter = $(this).closest('.new-tweet').find('.counter');
     if(($(this).val().length > 140)) {

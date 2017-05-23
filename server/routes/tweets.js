@@ -12,18 +12,18 @@ module.exports = function(DataHelpers) {
 
 
   tweetsRoutes.post("/like", function(req, res) {
-    if(!req.session.user) {
+    if(!req.session.user) { //check if logged in
       res.status(403).send('Please log in');
       return;
     }
     let name = req.session.user[0];
     let tweetID = req.body.id;
-    let likesArray = req.body.likesArray || [];
-    if(likesArray.indexOf(name) === -1) {
+    let likesArray = req.body.likesArray || []; //if likes array not defined default to empty array
+    if(likesArray.indexOf(name) === -1) { //if not found, like tweet
       DataHelpers.changeLikesUp(name, tweetID, (err, array) => {
         res.send(name);
       });
-    } else {
+    } else { //if found unlike tweet
       DataHelpers.changeLikesDown(name,tweetID, (err, array) => {
         res.send(name);
       });
@@ -41,15 +41,14 @@ module.exports = function(DataHelpers) {
   });
 
   tweetsRoutes.post("/", function(req, res) {
-    if(!req.session.user){
+    if(!req.session.user){ //check logged in
       res.status(403).send('please login or register');
       return;
     }
-    if (!req.body.text) {
+    if (!req.body.text) { //check post not empty , somewhat redundant
       res.status(400).json({ error: 'invalid request: no data in POST body'});
       return;
     }
-    //const user =  req.session.user;
     const randomUser = userHelper.generateRandomUser();
     const tweet = {
       user: {name: req.session.user[0],
@@ -72,7 +71,7 @@ module.exports = function(DataHelpers) {
   });
 
   tweetsRoutes.post("/register", function(req, res) {
-    DataHelpers.checkUserExists(req.body.email, (err, user) => {
+    DataHelpers.checkUserExists(req.body.email, (err, user) => { //first make sure email unique, this could be more effectively done in same as create user
       if (!(user[0] === undefined)) {
         return;
       }
@@ -82,7 +81,7 @@ module.exports = function(DataHelpers) {
         handler: req.body.handler,
         password: bcrypt.hashSync(req.body.password, 10)
       };
-      DataHelpers.createUser(user, (err) => {
+      DataHelpers.createUser(user, (err) => { //create user
       });
       req.session.user = [user['name'], user['handler']];
       res.redirect('/');
@@ -111,7 +110,7 @@ module.exports = function(DataHelpers) {
         res.status(403).send("Invalid Username/Password");
         return;
       } else if((bcrypt.compareSync(user.password, match[0].password))) {
-        req.session.user = [match[0]['name'], match[0]['handler']];
+        req.session.user = [match[0]['name'], match[0]['handler']];//array of name and handle
         res.redirect('/');
       }
 
