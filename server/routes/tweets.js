@@ -72,11 +72,6 @@ module.exports = function(DataHelpers) {
   });
 
   tweetsRoutes.post("/register", function(req, res) {
-     //check if email and password field filled
-    // if(req.body.email === "" ||  req.body.password === ""){
-    //   res.status(400).send("Please fill in both email and password");
-    //   return;
-    // }
     DataHelpers.checkUserExists(req.body.email, (err, user) => {
       if (!(user[0] === undefined)) {
         return;
@@ -122,25 +117,6 @@ module.exports = function(DataHelpers) {
 
 
     });
-
-//   let match = findLoginMatch(user); //return 1 if wrong pass, 2 if email doesn't exist, users id if pass and user match
-//   switch (match) {
-//     case 1:
-//       res.status(403).send("Invalid Password");
-//       break;
-//     case 2:
-//       res.status(403).send("Email not found");
-//       break
-//     default:
-//       //set cookie parameter to value submitted in request body form username
-//       req.session.username = users[match];
-//       res.redirect('/');
-//   }
-// });
-
-
-
-
   });
 
 

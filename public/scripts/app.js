@@ -4,13 +4,10 @@
  * Reminder: Use (and do all your DOM work in) jQuery's document ready function
  */
  $(document).ready( function() {
-  // $('.no-error-empty').slideUp();
-  // $('.no-error-limit').slideUp();
+
   loadTweets("all")
   let likesCount = {}
   $('body').on('click', '.likes',  function(event) {
-    //$('.likes').data('likes', 1);
-    // console.log($(this).data('likes'))//.find('.likes').data('id'));
     let id = $(this).data('id')
     let likesArray = $(this).data('likesarray');
     let likesnum = $(this).data("numberoflikes")
@@ -37,10 +34,6 @@
         $(this).data('numberoflikes', likesnum);
         $(this).data('likesarray', likesArray);
         counter.text(likesCount[id]);
-        // console.log(likesCount);
-        // likesCount[id] = likesnum;
-        // console.log(likesCount);
-        // console.log('data likes array after:', $(this).data('likesarray'))
       }
     })
   });
@@ -73,21 +66,11 @@
 
   $('.new-tweet form').on('submit', function(event) {
     event.preventDefault();
-    console.log('Test', $(this).find('.test').val());
     let serialized = $(this).serialize();
     if(!validate(this)){
       return;
     }
-    // let text = $(this).find('.text').val();
-    // if (text === "" || text === null) {
-    //   console.log(text.length);
-    //   return;
-    // } else if (text.length > 140) {
-    //   console.log('wtf too big');
-    //   $(this).after('<span class="error">TOO MANY LETTER</span>');
-    //   return;
-    // }
-    // console.log(serialized);
+    $('.text').val('');
     $.ajax({
       url:'/tweets/',
       method: 'POST',
@@ -95,18 +78,13 @@
       success: function () {
         loadTweets();
       }
-      // error: function () {
-      //   console.log('theres an error');
-      // }
     })
+  });
+
+
+});
   function validate(This) {
     let text = $(This).find('.text').val();
-    // if ($(This).find('.error')) { //if error span already shown
-    //   console.log($(This).find('.error'));
-    //   ($(This).find('.error').removeClass('error'));
-    //   console.log($(This).find('.error'));
-    // }
-
     if (text === "" || text === null) {
       $('.no-error-empty').slideDown();
       return false;
@@ -116,9 +94,6 @@
     }
     return true;
   };
-  });
-
-
   //responsible fetching tweets
   function loadTweets(x) {
     $.ajax({
@@ -128,17 +103,12 @@
     success: function (data) {
       if(x){
       renderTweets(data)
-    } else {
+      } else {
       datalength = (Object.keys(data).length);
       renderTweets(data[datalength-1]);
-    }
-    }
-    })
-    // error: function () {
-    //   console.log('theres an error');
-    // }
-    }
-  });
+      }
+    }})
+  }
 
 
 //});
